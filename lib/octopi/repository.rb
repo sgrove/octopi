@@ -12,6 +12,7 @@ module Octopi
     find_path "/repos/search/:query"
     resource_path "/repos/show/:id"
     delete_path "/repos/delete/:id"
+    languages_path "/repos/show/:user/:id/languages"
     
     attr_accessor :private
     
@@ -110,8 +111,12 @@ module Octopi
 
     def collaborators
       property('collaborators', [self.owner, self.name].join('/')).values.map { |v| User.find(v.join) }
-    end  
-    
+    end
+
+    def languages
+      result = Api.api.get(self.class.path_for(:languages), :id => self.name, :user => self.owner.to_s)["languages"]
+    end
+
     def self.create(options={})
       raise AuthenticationRequired, "To create a repository you must be authenticated." if Api.api.read_only?
       self.validate_args(options[:name] => :repo)

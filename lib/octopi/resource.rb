@@ -35,6 +35,10 @@ module Octopi
       def delete_path(path)
         (@path_spec||={})[:delete] = path
       end
+
+      def languages_path(path)
+        (@path_spec||={})[:languages] = path
+      end
       
       def find(*args)
         args = args.join('/') if args.is_a? Array
